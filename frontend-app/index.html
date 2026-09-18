@@ -1,13 +1,929 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>frontend-app</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cozy Retreat | Earthy Sanctuary & Stays</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..800;1,400..800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            terracotta: '#CB997E',
+            tan: '#DDBEA9',
+            cream: '#FFE8D6',
+            'sage-light': '#B7B7A4',
+            'sage-mid': '#A5A58D',
+            'sage-dark': '#6B705C',
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['"Playfair Display"', 'serif'],
+          },
+          boxShadow: {
+            'cozy': '0 10px 30px -5px rgba(107, 112, 92, 0.08), 0 4px 12px -2px rgba(203, 153, 126, 0.05)',
+            'cozy-lg': '0 20px 40px -10px rgba(107, 112, 92, 0.15)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <script type="module" src="/src/main.ts"></script>
+
+</head>
+<body class="min-h-screen flex flex-col relative antialiased selection:bg-terracotta selection:text-white">
+
+  <!-- Background decorative pattern -->
+  <div class="fixed inset-0 bg-pattern pointer-events-none z-0"></div>
+
+  <header id="main-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-cream/85 backdrop-blur-md border-b border-tan/40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <!-- Brand / Homepage Button -->
+        <a href="#hero" class="group flex items-center space-x-3 focus:outline-none focus:ring-2 focus:ring-terracotta rounded-lg p-1">
+          <div class="w-10 h-10 rounded-full bg-terracotta text-cream flex items-center justify-center shadow-md group-hover:bg-sage-dark transition-colors duration-300">
+            <i class="fa-solid fa-tree text-lg"></i>
+          </div>
+          <div class="flex flex-col">
+            <span class="font-serif text-xl sm:text-2xl font-bold tracking-tight text-sage-dark group-hover:text-terracotta transition-colors">Cozy Retreat</span>
+            <span class="text-[10px] tracking-widest uppercase text-sage-mid font-semibold -mt-1">Sanctuary & Stays</span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="hidden md:flex items-center space-x-8">
+          <a href="#hero" class="text-sm font-medium text-sage-dark hover:text-terracotta transition-colors duration-200">Home</a>
+          <a href="#showcase" class="text-sm font-medium text-sage-dark hover:text-terracotta transition-colors duration-200">Our Stays</a>
+          <a href="#quiz" class="text-sm font-medium text-sage-dark hover:text-terracotta transition-colors duration-200">Find Escape</a>
+          <a href="#amenities" class="text-sm font-medium text-sage-dark hover:text-terracotta transition-colors duration-200">Experiences</a>
+          <a href="#reviews" class="text-sm font-medium text-sage-dark hover:text-terracotta transition-colors duration-200">Stories</a>
+        </nav>
+
+        <!-- Right Side: Auth Action Buttons -->
+        <div class="hidden sm:flex items-center space-x-3">
+          <button 
+            onclick="openAuthModal('login')" 
+            class="px-5 py-2.5 rounded-xl text-sm font-semibold text-sage-dark border border-sage-dark/30 hover:bg-sage-dark hover:text-cream transition-all duration-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-sage-dark">
+            <i class="fa-solid fa-arrow-right-to-bracket mr-2 text-xs"></i>Log In
+          </button>
+          
+          <button 
+            onclick="openAuthModal('signup')" 
+            class="px-5 py-2.5 rounded-xl text-sm font-semibold bg-terracotta text-cream hover:bg-sage-dark transition-all duration-300 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-terracotta">
+            <i class="fa-solid fa-user-plus mr-2 text-xs"></i>Sign Up
+          </button>
+        </div>
+
+        <!-- Mobile Menu Toggle Button -->
+        <div class="flex sm:hidden items-center">
+          <button 
+            onclick="toggleMobileMenu()" 
+            id="mobile-menu-btn" 
+            aria-label="Toggle Navigation Menu"
+            class="p-2 rounded-lg text-sage-dark hover:bg-tan/30 focus:outline-none">
+            <i class="fa-solid fa-bars text-xl" id="menu-icon"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Dropdown -->
+    <div id="mobile-menu" class="hidden sm:hidden bg-cream border-b border-tan/40 px-4 pt-2 pb-6 space-y-3">
+      <a href="#hero" onclick="toggleMobileMenu()" class="block py-2 text-base font-medium text-sage-dark hover:text-terracotta">Home</a>
+      <a href="#showcase" onclick="toggleMobileMenu()" class="block py-2 text-base font-medium text-sage-dark hover:text-terracotta">Our Stays</a>
+      <a href="#quiz" onclick="toggleMobileMenu()" class="block py-2 text-base font-medium text-sage-dark hover:text-terracotta">Find Escape</a>
+      <a href="#amenities" onclick="toggleMobileMenu()" class="block py-2 text-base font-medium text-sage-dark hover:text-terracotta">Experiences</a>
+      <a href="#reviews" onclick="toggleMobileMenu()" class="block py-2 text-base font-medium text-sage-dark hover:text-terracotta">Stories</a>
+      <div class="pt-4 border-t border-tan/40 flex flex-col space-y-2">
+        <button 
+          onclick="openAuthModal('login'); toggleMobileMenu();" 
+          class="w-full py-2.5 rounded-xl text-center font-semibold text-sage-dark border border-sage-dark/30 hover:bg-sage-dark hover:text-cream transition-colors">
+          Log In
+        </button>
+        <button 
+          onclick="openAuthModal('signup'); toggleMobileMenu();" 
+          class="w-full py-2.5 rounded-xl text-center font-semibold bg-terracotta text-cream hover:bg-sage-dark transition-colors shadow">
+          Sign Up
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container with navbar padding -->
+  <main class="flex-grow pt-20 z-10">
+
+    <section id="hero" class="relative pt-12 pb-20 md:pt-20 md:pb-32 overflow-hidden">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          <!-- Hero Text -->
+          <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+            <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full badge-terracotta text-xs font-semibold tracking-wide uppercase">
+              <i class="fa-solid fa-sparkles text-terracotta"></i>
+              <span>Restful Stays & Earthy Sanctuaries</span>
+            </div>
+
+            <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-sage-dark leading-tight">
+              Unplug in spaces crafted for <span class="italic text-terracotta font-serif">peace & presence.</span>
+            </h1>
+
+            <p class="text-base sm:text-lg text-sage-dark/80 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
+              Discover serene cabins, secluded thermal lofts, and mindful sanctuaries designed to reset your spirit. Styled in warm earth tones and tranquil textures.
+            </p>
+
+            <!-- Search / Quick Action Box -->
+            <div class="bg-white/80 backdrop-blur-md p-3 sm:p-4 rounded-2xl shadow-cozy border border-tan/50 max-w-xl mx-auto lg:mx-0 mt-6">
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div class="p-2 bg-cream/50 rounded-xl border border-tan/30 text-left">
+                  <label class="block text-[10px] uppercase font-bold text-sage-mid tracking-wider">Destination</label>
+                  <select class="w-full bg-transparent text-sm font-semibold text-sage-dark focus:outline-none cursor-pointer">
+                    <option>Pacific Northwest</option>
+                    <option>Blue Ridge Pines</option>
+                    <option>Nordic Fjord Valley</option>
+                    <option>Alpine Woods</option>
+                  </select>
+                </div>
+
+                <div class="p-2 bg-cream/50 rounded-xl border border-tan/30 text-left">
+                  <label class="block text-[10px] uppercase font-bold text-sage-mid tracking-wider">Guests</label>
+                  <select class="w-full bg-transparent text-sm font-semibold text-sage-dark focus:outline-none cursor-pointer">
+                    <option>2 Adults (Solo/Couple)</option>
+                    <option>1 Adult (Solo Stay)</option>
+                    <option>4 Guests (Small Group)</option>
+                    <option>6+ Guests (Retreat)</option>
+                  </select>
+                </div>
+
+                <button 
+                  onclick="scrollToShowcase()" 
+                  class="w-full h-full min-h-[48px] bg-sage-dark text-cream font-semibold text-sm rounded-xl hover:bg-terracotta transition-all duration-300 shadow flex items-center justify-center space-x-2">
+                  <i class="fa-solid fa-compass"></i>
+                  <span>Explore Cabins</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="pt-6 grid grid-cols-3 gap-4 max-w-md mx-auto lg:mx-0 border-t border-tan/40">
+              <div>
+                <p class="text-2xl font-bold font-serif text-sage-dark">120+</p>
+                <p class="text-xs text-sage-mid">Curated Cabins</p>
+              </div>
+              <div>
+                <p class="text-2xl font-bold font-serif text-terracotta">4.98 ★</p>
+                <p class="text-xs text-sage-mid">Guest Rating</p>
+              </div>
+              <div>
+                <p class="text-2xl font-bold font-serif text-sage-dark">100%</p>
+                <p class="text-xs text-sage-mid">Eco-Sourced</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hero Visual Cards -->
+          <div class="lg:col-span-5 relative">
+            <div class="relative mx-auto max-w-md lg:max-w-none">
+              <!-- Main Feature Graphic Card -->
+              <div class="relative rounded-3xl overflow-hidden shadow-cozy-lg border-4 border-white bg-tan">
+                <img 
+                  src="https://images.unsplash.com/photo-1542718610-a1d656d1884c?auto=format&fit=crop&w=900&q=80" 
+                  alt="Cozy Forest Cabin" 
+                  class="w-full h-[400px] sm:h-[460px] object-cover hover:scale-105 transition-transform duration-700"
+                  onerror="this.src='https://placehold.co/800x600/CB997E/FFE8D6?text=Cozy+Retreat+Cabin'"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-sage-dark/80 via-transparent to-transparent"></div>
+                
+                <div class="absolute bottom-6 left-6 right-6 text-white">
+                  <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-terracotta/90 text-cream backdrop-blur-sm mb-2">
+                    Featured Sanctuary
+                  </span>
+                  <h3 class="text-2xl font-serif font-bold text-cream">Cedar Whispers Loft</h3>
+                  <p class="text-xs text-tan/90 flex items-center mt-1">
+                    <i class="fa-solid fa-location-dot mr-1"></i> Olympic Peninsula, WA
+                  </p>
+                </div>
+              </div>
+
+              <!-- Floating Highlight Badge 1 -->
+              <div class="absolute -top-6 -left-6 bg-white/95 backdrop-blur-md p-4 rounded-2xl shadow-cozy border border-tan/40 hidden sm:flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-tan/40 text-sage-dark flex items-center justify-center">
+                  <i class="fa-solid fa-fire text-terracotta text-lg"></i>
+                </div>
+                <div>
+                  <p class="text-xs font-bold text-sage-dark">Wood Stove Heating</p>
+                  <p class="text-[11px] text-sage-mid">Warm hearth in every room</p>
+                </div>
+              </div>
+
+              <!-- Floating Highlight Badge 2 -->
+              <div class="absolute -bottom-6 -right-6 bg-white/95 backdrop-blur-md p-4 rounded-2xl shadow-cozy border border-tan/40 hidden sm:flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-sage-light/30 text-sage-dark flex items-center justify-center">
+                  <i class="fa-solid fa-mug-hot text-sage-dark text-lg"></i>
+                </div>
+                <div>
+                  <p class="text-xs font-bold text-sage-dark">Morning Organic Roast</p>
+                  <p class="text-[11px] text-sage-mid">Complimentary artisanal blend</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section id="showcase" class="py-16 bg-gradient-to-b from-cream via-tan/20 to-cream border-y border-tan/30">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Section Header -->
+        <div class="text-center max-w-3xl mx-auto mb-12">
+          <span class="text-xs font-bold uppercase tracking-widest text-terracotta">Curated Stays</span>
+          <h2 class="text-3xl sm:text-4xl font-serif font-bold text-sage-dark mt-2">
+            Explore Handpicked Sanctuaries
+          </h2>
+          <p class="text-sage-dark/80 text-sm sm:text-base mt-3">
+            Each space is selected for natural light, tactile comfort, and deep tranquility. Filter by your preferred setting.
+          </p>
+
+          <!-- Category Filter Tabs -->
+          <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-8" id="category-tabs">
+            <button 
+              onclick="filterStays('all', this)" 
+              class="tab-btn active-tab px-5 py-2 rounded-full text-xs sm:text-sm font-semibold border border-sage-mid text-sage-dark bg-white transition-all shadow-sm">
+              All Cabins
+            </button>
+            <button 
+              onclick="filterStays('forest', this)" 
+              class="tab-btn px-5 py-2 rounded-full text-xs sm:text-sm font-semibold border border-tan text-sage-dark bg-white/80 hover:bg-tan/30 transition-all">
+              Forest & Pines
+            </button>
+            <button 
+              onclick="filterStays('lake', this)" 
+              class="tab-btn px-5 py-2 rounded-full text-xs sm:text-sm font-semibold border border-tan text-sage-dark bg-white/80 hover:bg-tan/30 transition-all">
+              Lakeside
+            </button>
+            <button 
+              onclick="filterStays('mountain', this)" 
+              class="tab-btn px-5 py-2 rounded-full text-xs sm:text-sm font-semibold border border-tan text-sage-dark bg-white/80 hover:bg-tan/30 transition-all">
+              Mountain Peaks
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="stays-grid">
+          
+          <!-- Stay Card 1 -->
+          <div class="stay-card group bg-white rounded-2xl overflow-hidden border border-tan/40 shadow-cozy hover:shadow-cozy-lg transition-all duration-300" data-category="forest">
+            <div class="relative h-64 overflow-hidden">
+              <img 
+                src="https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=700&q=80" 
+                alt="Whispering Pines Cabin" 
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                onerror="this.src='https://placehold.co/600x400/DDBEA9/6B705C?text=Pines+Cabin'"
+              />
+              <button 
+                onclick="toggleBookmark(this)" 
+                aria-label="Bookmark Whispering Pines Cabin"
+                class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/80 backdrop-blur-md text-sage-dark hover:text-terracotta flex items-center justify-center transition-colors shadow">
+                <i class="fa-regular fa-bookmark"></i>
+              </button>
+              <div class="absolute bottom-3 left-3 bg-sage-dark/80 backdrop-blur-sm text-cream text-[11px] font-semibold px-2.5 py-1 rounded-md">
+                Forest Sanctuary
+              </div>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-semibold text-terracotta"><i class="fa-solid fa-star text-amber-500 mr-1"></i>4.96 (42 reviews)</span>
+                <span class="text-xs text-sage-mid"><i class="fa-solid fa-user-group mr-1"></i>2-4 Guests</span>
+              </div>
+              <h3 class="text-xl font-serif font-bold text-sage-dark mt-2 group-hover:text-terracotta transition-colors">Whispering Pines Cabin</h3>
+              <p class="text-xs text-sage-dark/70 mt-1 line-clamp-2">Nestled in deep evergreen forest with panoramic glass skylights and outdoor cedar hot tub.</p>
+              
+              <div class="mt-4 pt-4 border-t border-tan/30 flex items-center justify-between">
+                <div>
+                  <span class="text-lg font-bold text-sage-dark">$240</span>
+                  <span class="text-xs text-sage-mid">/ night</span>
+                </div>
+                <button 
+                  onclick="openDetailModal('Whispering Pines Cabin', 'Nestled in deep evergreen forest with panoramic glass skylights, outdoor cedar hot tub, and private trail access.', '$240', 'https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=700&q=80')" 
+                  class="px-4 py-2 rounded-xl text-xs font-bold text-cream bg-sage-dark hover:bg-terracotta transition-colors">
+                  View Details
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stay Card 2 -->
+          <div class="stay-card group bg-white rounded-2xl overflow-hidden border border-tan/40 shadow-cozy hover:shadow-cozy-lg transition-all duration-300" data-category="lake">
+            <div class="relative h-64 overflow-hidden">
+              <img 
+                src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?auto=format&fit=crop&w=700&q=80" 
+                alt="Mirror Waters Lodge" 
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                onerror="this.src='https://placehold.co/600x400/CB997E/FFE8D6?text=Lakeside+Lodge'"
+              />
+              <button 
+                onclick="toggleBookmark(this)" 
+                aria-label="Bookmark Mirror Waters Lodge"
+                class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/80 backdrop-blur-md text-sage-dark hover:text-terracotta flex items-center justify-center transition-colors shadow">
+                <i class="fa-regular fa-bookmark"></i>
+              </button>
+              <div class="absolute bottom-3 left-3 bg-sage-dark/80 backdrop-blur-sm text-cream text-[11px] font-semibold px-2.5 py-1 rounded-md">
+                Lakeside Retreat
+              </div>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-semibold text-terracotta"><i class="fa-solid fa-star text-amber-500 mr-1"></i>4.99 (58 reviews)</span>
+                <span class="text-xs text-sage-mid"><i class="fa-solid fa-user-group mr-1"></i>2 Guests</span>
+              </div>
+              <h3 class="text-xl font-serif font-bold text-sage-dark mt-2 group-hover:text-terracotta transition-colors">Mirror Waters Cottage</h3>
+              <p class="text-xs text-sage-dark/70 mt-1 line-clamp-2">Direct lake access with private wooden dock, complimentary kayaks, and vintage fireplace.</p>
+              
+              <div class="mt-4 pt-4 border-t border-tan/30 flex items-center justify-between">
+                <div>
+                  <span class="text-lg font-bold text-sage-dark">$295</span>
+                  <span class="text-xs text-sage-mid">/ night</span>
+                </div>
+                <button 
+                  onclick="openDetailModal('Mirror Waters Cottage', 'Direct lake access with private wooden dock, complimentary kayaks, cozy stone fireplace, and morning tea nook.', '$295', 'https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?auto=format&fit=crop&w=700&q=80')" 
+                  class="px-4 py-2 rounded-xl text-xs font-bold text-cream bg-sage-dark hover:bg-terracotta transition-colors">
+                  View Details
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stay Card 3 -->
+          <div class="stay-card group bg-white rounded-2xl overflow-hidden border border-tan/40 shadow-cozy hover:shadow-cozy-lg transition-all duration-300" data-category="mountain">
+            <div class="relative h-64 overflow-hidden">
+              <img 
+                src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=700&q=80" 
+                alt="Solitude Crest Peak" 
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                onerror="this.src='https://placehold.co/600x400/A5A58D/FFE8D6?text=Mountain+Peak'"
+              />
+              <button 
+                onclick="toggleBookmark(this)" 
+                aria-label="Bookmark Solitude Crest Peak"
+                class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/80 backdrop-blur-md text-sage-dark hover:text-terracotta flex items-center justify-center transition-colors shadow">
+                <i class="fa-regular fa-bookmark"></i>
+              </button>
+              <div class="absolute bottom-3 left-3 bg-sage-dark/80 backdrop-blur-sm text-cream text-[11px] font-semibold px-2.5 py-1 rounded-md">
+                Mountain Loft
+              </div>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-semibold text-terracotta"><i class="fa-solid fa-star text-amber-500 mr-1"></i>4.94 (36 reviews)</span>
+                <span class="text-xs text-sage-mid"><i class="fa-solid fa-user-group mr-1"></i>2-6 Guests</span>
+              </div>
+              <h3 class="text-xl font-serif font-bold text-sage-dark mt-2 group-hover:text-terracotta transition-colors">Solitude Crest Loft</h3>
+              <p class="text-xs text-sage-dark/70 mt-1 line-clamp-2">Elevated alpine retreat offering 360-degree mountain ridge views and star-gazing deck.</p>
+              
+              <div class="mt-4 pt-4 border-t border-tan/30 flex items-center justify-between">
+                <div>
+                  <span class="text-lg font-bold text-sage-dark">$310</span>
+                  <span class="text-xs text-sage-mid">/ night</span>
+                </div>
+                <button 
+                  onclick="openDetailModal('Solitude Crest Loft', 'Elevated alpine retreat offering 360-degree mountain ridge views, private sauna, and high-altitude star deck.', '$310', 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=700&q=80')" 
+                  class="px-4 py-2 rounded-xl text-xs font-bold text-cream bg-sage-dark hover:bg-terracotta transition-colors">
+                  View Details
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <section id="quiz" class="py-16 bg-cream">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-gradient-to-r from-tan/40 via-cream to-tan/40 rounded-3xl p-6 sm:p-10 border border-tan shadow-cozy text-center relative overflow-hidden">
+          
+          <div class="inline-block px-3 py-1 rounded-full badge-terracotta text-xs font-bold uppercase mb-3">
+            Interactive Finder
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-serif font-bold text-sage-dark">
+            Find Your Ideal Cozy Escape
+          </h2>
+          <p class="text-xs sm:text-sm text-sage-dark/80 max-w-lg mx-auto mt-2">
+            Select your preferred vibe to instantly discover the sanctuary tailored to your current energy.
+          </p>
+
+          <!-- Quiz Interactive Form -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 max-w-2xl mx-auto">
+            
+            <div class="bg-white p-4 rounded-2xl border border-tan/60 shadow-sm text-left">
+              <label class="block text-[11px] font-bold uppercase text-sage-dark mb-2">1. Your Desired Vibe</label>
+              <select id="quiz-vibe" class="w-full text-xs font-semibold text-sage-dark bg-cream/40 p-2.5 rounded-xl border border-tan/40 focus:outline-none">
+                <option value="quiet">Quiet Reading & Rest</option>
+                <option value="adventure">Forest Hikes & Kayak</option>
+                <option value="spa">Thermal Bath & Pamper</option>
+              </select>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl border border-tan/60 shadow-sm text-left">
+              <label class="block text-[11px] font-bold uppercase text-sage-dark mb-2">2. Group Size</label>
+              <select id="quiz-guests" class="w-full text-xs font-semibold text-sage-dark bg-cream/40 p-2.5 rounded-xl border border-tan/40 focus:outline-none">
+                <option value="solo">Solo Retreat (1 Person)</option>
+                <option value="couple">Couple Escape (2 People)</option>
+                <option value="group">Friends/Family (3-6 People)</option>
+              </select>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl border border-tan/60 shadow-sm text-left">
+              <label class="block text-[11px] font-bold uppercase text-sage-dark mb-2">3. Favorite Element</label>
+              <select id="quiz-element" class="w-full text-xs font-semibold text-sage-dark bg-cream/40 p-2.5 rounded-xl border border-tan/40 focus:outline-none">
+                <option value="wood">Wood Fireplace</option>
+                <option value="water">Lakeside / Hot Tub</option>
+                <option value="view">High Ridge Panoramas</option>
+              </select>
+            </div>
+
+          </div>
+
+          <button 
+            onclick="generateRecommendation()" 
+            class="mt-6 px-8 py-3 bg-terracotta text-cream font-bold text-sm rounded-xl hover:bg-sage-dark transition-all duration-300 shadow-md">
+            <i class="fa-solid fa-wand-magic-sparkles mr-2"></i>Match Me with a Retreat
+          </button>
+
+          <!-- Recommendation Result Box (Hidden by default) -->
+          <div id="quiz-result" class="hidden mt-6 p-4 bg-white/90 rounded-2xl border border-terracotta/40 max-w-md mx-auto text-left transition-all">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 rounded-full bg-terracotta/20 text-terracotta flex items-center justify-center font-bold text-lg">
+                🌿
+              </div>
+              <div>
+                <p class="text-xs font-bold text-terracotta uppercase">Recommended Stay</p>
+                <h4 id="result-title" class="text-base font-bold font-serif text-sage-dark">Whispering Pines Cabin</h4>
+                <p id="result-desc" class="text-xs text-sage-dark/80">Matches your desire for cozy wood fire and peaceful forest immersion.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section id="amenities" class="py-16 bg-tan/20 border-t border-tan/30">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center max-w-2xl mx-auto mb-12">
+          <span class="text-xs font-bold uppercase tracking-widest text-sage-dark/70">Cozy Rituals</span>
+          <h2 class="text-3xl font-serif font-bold text-sage-dark mt-1">Designed for Mindful Living</h2>
+          <p class="text-xs sm:text-sm text-sage-dark/80 mt-2">Thoughtfully curated amenities crafted using natural materials and cozy earth tones.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          
+          <div class="p-6 bg-white rounded-2xl border border-tan/40 shadow-sm hover:shadow-md transition-all text-center">
+            <div class="w-12 h-12 rounded-2xl bg-cream text-terracotta mx-auto flex items-center justify-center text-xl mb-4 border border-tan/30">
+              <i class="fa-solid fa-hot-tub-person"></i>
+            </div>
+            <h3 class="font-serif font-bold text-sage-dark text-lg">Cedar Thermal Baths</h3>
+            <p class="text-xs text-sage-dark/70 mt-2">Private outdoor hot tubs crafted from aromatic red cedar wood.</p>
+          </div>
+
+          <div class="p-6 bg-white rounded-2xl border border-tan/40 shadow-sm hover:shadow-md transition-all text-center">
+            <div class="w-12 h-12 rounded-2xl bg-cream text-sage-dark mx-auto flex items-center justify-center text-xl mb-4 border border-tan/30">
+              <i class="fa-solid fa-fire-burner"></i>
+            </div>
+            <h3 class="font-serif font-bold text-sage-dark text-lg">Hearthside Nooks</h3>
+            <p class="text-xs text-sage-dark/70 mt-2">Pre-stacked organic firewood and wool throw blankets in every lounge.</p>
+          </div>
+
+          <div class="p-6 bg-white rounded-2xl border border-tan/40 shadow-sm hover:shadow-md transition-all text-center">
+            <div class="w-12 h-12 rounded-2xl bg-cream text-terracotta mx-auto flex items-center justify-center text-xl mb-4 border border-tan/30">
+              <i class="fa-solid fa-seedling"></i>
+            </div>
+            <h3 class="font-serif font-bold text-sage-dark text-lg">Farm Breakfast Basket</h3>
+            <p class="text-xs text-sage-dark/70 mt-2">Fresh artisan sourdough, wild berry preserve, and local goat cheese delivered.</p>
+          </div>
+
+          <div class="p-6 bg-white rounded-2xl border border-tan/40 shadow-sm hover:shadow-md transition-all text-center">
+            <div class="w-12 h-12 rounded-2xl bg-cream text-sage-dark mx-auto flex items-center justify-center text-xl mb-4 border border-tan/30">
+              <i class="fa-solid fa-wifi"></i>
+            </div>
+            <h3 class="font-serif font-bold text-sage-dark text-lg">Optional Digital Detox</h3>
+            <p class="text-xs text-sage-dark/70 mt-2">Toggle high-speed fiber Wi-Fi on or lock away screens in custom timber boxes.</p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <section id="reviews" class="py-16 bg-cream">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center max-w-2xl mx-auto mb-12">
+          <span class="text-xs font-bold uppercase tracking-widest text-terracotta">Guest Stories</span>
+          <h2 class="text-3xl font-serif font-bold text-sage-dark mt-1">Real Moments of Stillness</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          <div class="p-6 bg-white/90 rounded-2xl border border-tan/40 shadow-cozy flex flex-col justify-between">
+            <div>
+              <div class="flex text-amber-500 text-xs space-x-1 mb-3">
+                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+              </div>
+              <p class="text-xs sm:text-sm text-sage-dark/80 italic leading-relaxed">
+                "The palette and atmosphere of the cabin felt like a gentle hug. I wrote three chapters of my book in front of the wood stove."
+              </p>
+            </div>
+            <div class="mt-6 pt-4 border-t border-tan/30 flex items-center space-x-3">
+              <div class="w-9 h-9 rounded-full bg-tan flex items-center justify-center font-bold text-sage-dark text-xs">
+                EA
+              </div>
+              <div>
+                <p class="text-xs font-bold text-sage-dark">Evelyn Adams</p>
+                <p class="text-[10px] text-sage-mid">Stayed at Cedar Whispers Loft</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6 bg-white/90 rounded-2xl border border-tan/40 shadow-cozy flex flex-col justify-between">
+            <div>
+              <div class="flex text-amber-500 text-xs space-x-1 mb-3">
+                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+              </div>
+              <p class="text-xs sm:text-sm text-sage-dark/80 italic leading-relaxed">
+                "Simple, elegant, and insanely peaceful. Waking up to misty lake views with warm drip coffee was the exact reset my partner and I needed."
+              </p>
+            </div>
+            <div class="mt-6 pt-4 border-t border-tan/30 flex items-center space-x-3">
+              <div class="w-9 h-9 rounded-full bg-terracotta text-cream flex items-center justify-center font-bold text-xs">
+                MR
+              </div>
+              <div>
+                <p class="text-xs font-bold text-sage-dark">Marcus Reed</p>
+                <p class="text-[10px] text-sage-mid">Stayed at Mirror Waters Cottage</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6 bg-white/90 rounded-2xl border border-tan/40 shadow-cozy flex flex-col justify-between">
+            <div>
+              <div class="flex text-amber-500 text-xs space-x-1 mb-3">
+                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+              </div>
+              <p class="text-xs sm:text-sm text-sage-dark/80 italic leading-relaxed">
+                "The attention to design detail is unmatched. Warm linens, earthy scent, zero noise pollution. We are already booking our winter stay!"
+              </p>
+            </div>
+            <div class="mt-6 pt-4 border-t border-tan/30 flex items-center space-x-3">
+              <div class="w-9 h-9 rounded-full bg-sage-mid text-white flex items-center justify-center font-bold text-xs">
+                SL
+              </div>
+              <div>
+                <p class="text-xs font-bold text-sage-dark">Sophia Lin</p>
+                <p class="text-[10px] text-sage-mid">Stayed at Solitude Crest Loft</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="py-12 bg-sage-dark text-cream">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+          <div class="md:col-span-7">
+            <span class="text-xs font-bold uppercase tracking-widest text-tan">Cozy Journal</span>
+            <h3 class="text-2xl sm:text-3xl font-serif font-bold mt-1">Receive Seasonal Retreat Notes</h3>
+            <p class="text-xs sm:text-sm text-sage-light mt-2">Get early access to quiet seasonal cabin openings and peaceful sanctuary guides.</p>
+          </div>
+          <div class="md:col-span-5">
+            <form onsubmit="handleNewsletter(event)" class="flex flex-col sm:flex-row gap-2">
+              <input 
+                type="email" 
+                required 
+                placeholder="Enter your email address" 
+                class="px-4 py-3 rounded-xl bg-cream/10 border border-sage-light/30 text-cream placeholder-sage-light text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-terracotta w-full"
+              />
+              <button 
+                type="submit" 
+                class="px-5 py-3 rounded-xl bg-terracotta hover:bg-tan hover:text-sage-dark text-cream font-bold text-xs sm:text-sm transition-colors whitespace-nowrap">
+                Subscribe
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="bg-sage-dark/95 text-tan border-t border-sage-mid/30 py-12 z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        
+        <!-- Column 1: Brand Info -->
+        <div class="space-y-4">
+          <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 rounded-full bg-terracotta text-cream flex items-center justify-center">
+              <i class="fa-solid fa-tree text-sm"></i>
+            </div>
+            <span class="font-serif text-xl font-bold text-cream">Cozy Retreat</span>
+          </div>
+          <p class="text-xs text-sage-light leading-relaxed">
+            Earthy sanctuaries and calm cabin stays designed to foster deep relaxation and cozy retreat experiences.
+          </p>
+          <!-- Palette Swatch Display -->
+          <div class="pt-2 flex items-center space-x-1.5" title="Palette: Cozy Neutral Retreat">
+            <span class="w-4 h-4 rounded-full bg-[#CB997E] inline-block shadow-sm"></span>
+            <span class="w-4 h-4 rounded-full bg-[#DDBEA9] inline-block shadow-sm"></span>
+            <span class="w-4 h-4 rounded-full bg-[#FFE8D6] inline-block shadow-sm"></span>
+            <span class="w-4 h-4 rounded-full bg-[#B7B7A4] inline-block shadow-sm"></span>
+            <span class="w-4 h-4 rounded-full bg-[#A5A58D] inline-block shadow-sm"></span>
+            <span class="w-4 h-4 rounded-full bg-[#6B705C] inline-block shadow-sm"></span>
+          </div>
+        </div>
+
+        <!-- Column 2: Navigation -->
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-cream mb-4">Navigation</h4>
+          <ul class="space-y-2 text-xs text-sage-light">
+            <li><a href="#hero" class="hover:text-terracotta transition-colors">Home Overview</a></li>
+            <li><a href="#showcase" class="hover:text-terracotta transition-colors">Our Stays & Cabins</a></li>
+            <li><a href="#quiz" class="hover:text-terracotta transition-colors">Interactive Escape Match</a></li>
+            <li><a href="#amenities" class="hover:text-terracotta transition-colors">Rituals & Amenities</a></li>
+            <li><a href="#reviews" class="hover:text-terracotta transition-colors">Guest Stories</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Sanctuary Locations -->
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-cream mb-4">Locations</h4>
+          <ul class="space-y-2 text-xs text-sage-light">
+            <li><span class="text-tan">Pacific Northwest Pines</span></li>
+            <li><span class="text-tan">Blue Ridge Valley</span></li>
+            <li><span class="text-tan">Nordic Fjord Lakes</span></li>
+            <li><span class="text-tan">Alpine Ridge Loft</span></li>
+          </ul>
+        </div>
+
+        <!-- Column 4: Social & Legal -->
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-cream mb-4">Connect</h4>
+          <div class="flex space-x-3 mb-4">
+            <a href="#" aria-label="Instagram" class="w-8 h-8 rounded-lg bg-sage-mid/30 flex items-center justify-center text-cream hover:bg-terracotta transition-colors"><i class="fa-brands fa-instagram text-xs"></i></a>
+            <a href="#" aria-label="Pinterest" class="w-8 h-8 rounded-lg bg-sage-mid/30 flex items-center justify-center text-cream hover:bg-terracotta transition-colors"><i class="fa-brands fa-pinterest text-xs"></i></a>
+            <a href="#" aria-label="Twitter" class="w-8 h-8 rounded-lg bg-sage-mid/30 flex items-center justify-center text-cream hover:bg-terracotta transition-colors"><i class="fa-brands fa-x-twitter text-xs"></i></a>
+          </div>
+          <p class="text-[11px] text-sage-light">
+            &copy; 2026 Cozy Retreat. Styled with <span class="text-terracotta">Cozy Neutral Retreat</span> Palette.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </footer>
+
+  <!-- Auth Modal Container -->
+  <div 
+    id="auth-modal" 
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop opacity-0 pointer-events-none transition-opacity duration-300"
+    onclick="handleModalBackdropClick(event)">
+    
+    <div class="bg-cream rounded-3xl border border-tan shadow-cozy-lg w-full max-w-md overflow-hidden transform scale-95 transition-transform duration-300 relative" id="modal-card">
+      
+      <!-- Close Button -->
+      <button 
+        onclick="closeAuthModal()" 
+        class="absolute top-4 right-4 w-9 h-9 rounded-full bg-tan/40 text-sage-dark hover:bg-terracotta hover:text-cream flex items-center justify-center transition-colors focus:outline-none">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <!-- Modal Header Banner -->
+      <div class="bg-gradient-to-r from-terracotta to-tan p-6 text-cream">
+        <div class="flex items-center space-x-2 text-xs uppercase tracking-widest font-semibold opacity-90">
+          <i class="fa-solid fa-tree"></i>
+          <span>Cozy Retreat Member Portal</span>
+        </div>
+        <h3 id="modal-title" class="text-2xl font-serif font-bold mt-1 text-white">Welcome Back</h3>
+        <p id="modal-subtitle" class="text-xs text-cream/90 mt-1">Log in to manage your stays and saved sanctuaries.</p>
+      </div>
+
+      <div class="p-6 sm:p-8">
+        
+        <!-- Toggle Tabs inside modal -->
+        <div class="flex bg-tan/30 p-1 rounded-xl mb-6">
+          <button 
+            id="tab-login-btn"
+            onclick="switchAuthTab('login')" 
+            class="w-1/2 py-2 rounded-lg text-xs font-bold transition-all bg-sage-dark text-cream shadow">
+            Log In
+          </button>
+          <button 
+            id="tab-signup-btn"
+            onclick="switchAuthTab('signup')" 
+            class="w-1/2 py-2 rounded-lg text-xs font-bold transition-all text-sage-dark hover:text-terracotta">
+            Sign Up
+          </button>
+        </div>
+
+        <!-- LOGIN FORM -->
+        <form id="login-form" onsubmit="handleAuthSubmit(event, 'login')" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold uppercase text-sage-dark mb-1">Email Address</label>
+            <div class="relative">
+              <i class="fa-solid fa-envelope absolute left-3.5 top-3 text-sage-mid text-xs"></i>
+              <input 
+                type="email" 
+                required 
+                placeholder="you@example.com"
+                class="w-full pl-9 pr-4 py-2.5 rounded-xl bg-white border border-tan/60 text-xs sm:text-sm text-sage-dark focus:outline-none focus:ring-2 focus:ring-terracotta"
+              />
+            </div>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label class="block text-xs font-bold uppercase text-sage-dark">Password</label>
+              <a href="#" onclick="showToast('Password reset link sent to your email.'); return false;" class="text-[11px] text-terracotta hover:underline font-medium">Forgot?</a>
+            </div>
+            <div class="relative">
+              <i class="fa-solid fa-lock absolute left-3.5 top-3 text-sage-mid text-xs"></i>
+              <input 
+                type="password" 
+                required 
+                placeholder="••••••••"
+                class="w-full pl-9 pr-4 py-2.5 rounded-xl bg-white border border-tan/60 text-xs sm:text-sm text-sage-dark focus:outline-none focus:ring-2 focus:ring-terracotta"
+              />
+            </div>
+          </div>
+
+          <div class="flex items-center space-x-2">
+            <input type="checkbox" id="remember" class="rounded border-tan text-terracotta focus:ring-terracotta accent-terracotta cursor-pointer" />
+            <label for="remember" class="text-xs text-sage-dark/80 cursor-pointer">Remember me for 30 days</label>
+          </div>
+
+          <button 
+            type="submit" 
+            class="w-full py-3 bg-sage-dark hover:bg-terracotta text-cream font-bold text-xs sm:text-sm rounded-xl transition-colors shadow-md">
+            Log In to Sanctuary
+          </button>
+        </form>
+
+        <!-- SIGNUP FORM -->
+        <form id="signup-form" onsubmit="handleAuthSubmit(event, 'signup')" class="space-y-4 hidden">
+          <div>
+            <label class="block text-xs font-bold uppercase text-sage-dark mb-1">Full Name</label>
+            <div class="relative">
+              <i class="fa-solid fa-user absolute left-3.5 top-3 text-sage-mid text-xs"></i>
+              <input 
+                type="text" 
+                required 
+                placeholder="Evelyn Reed"
+                class="w-full pl-9 pr-4 py-2.5 rounded-xl bg-white border border-tan/60 text-xs sm:text-sm text-sage-dark focus:outline-none focus:ring-2 focus:ring-terracotta"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase text-sage-dark mb-1">Email Address</label>
+            <div class="relative">
+              <i class="fa-solid fa-envelope absolute left-3.5 top-3 text-sage-mid text-xs"></i>
+              <input 
+                type="email" 
+                required 
+                placeholder="you@example.com"
+                class="w-full pl-9 pr-4 py-2.5 rounded-xl bg-white border border-tan/60 text-xs sm:text-sm text-sage-dark focus:outline-none focus:ring-2 focus:ring-terracotta"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase text-sage-dark mb-1">Create Password</label>
+            <div class="relative">
+              <i class="fa-solid fa-lock absolute left-3.5 top-3 text-sage-mid text-xs"></i>
+              <input 
+                type="password" 
+                required 
+                placeholder="At least 8 characters"
+                class="w-full pl-9 pr-4 py-2.5 rounded-xl bg-white border border-tan/60 text-xs sm:text-sm text-sage-dark focus:outline-none focus:ring-2 focus:ring-terracotta"
+              />
+            </div>
+          </div>
+
+          <div class="flex items-center space-x-2">
+            <input type="checkbox" required id="terms" class="rounded border-tan text-terracotta focus:ring-terracotta accent-terracotta cursor-pointer" />
+            <label for="terms" class="text-xs text-sage-dark/80 cursor-pointer">I agree to the <a href="#" class="text-terracotta underline">Terms & Quiet Policy</a></label>
+          </div>
+
+          <button 
+            type="submit" 
+            class="w-full py-3 bg-terracotta hover:bg-sage-dark text-cream font-bold text-xs sm:text-sm rounded-xl transition-colors shadow-md">
+            Create Account
+          </button>
+        </form>
+
+        <!-- Social login divider -->
+        <div class="relative my-6 text-center">
+          <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-tan/40"></div></div>
+          <span class="relative bg-cream px-3 text-[10px] text-sage-mid uppercase font-bold tracking-wider">Or continue with</span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <button 
+            onclick="showToast('Google authentication initialized.')"
+            class="py-2 px-3 rounded-xl border border-tan/60 bg-white text-sage-dark hover:bg-tan/20 text-xs font-semibold flex items-center justify-center space-x-2 transition-colors">
+            <i class="fa-brands fa-google text-red-500"></i>
+            <span>Google</span>
+          </button>
+          <button 
+            onclick="showToast('Apple authentication initialized.')"
+            class="py-2 px-3 rounded-xl border border-tan/60 bg-white text-sage-dark hover:bg-tan/20 text-xs font-semibold flex items-center justify-center space-x-2 transition-colors">
+            <i class="fa-brands fa-apple text-black"></i>
+            <span>Apple</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Retreat Detail Modal -->
+  <div 
+    id="detail-modal" 
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="bg-cream rounded-3xl border border-tan shadow-cozy-lg w-full max-w-xl overflow-hidden relative" id="detail-card">
+      <button 
+        onclick="closeDetailModal()" 
+        class="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-white/80 text-sage-dark hover:bg-terracotta hover:text-cream flex items-center justify-center transition-colors shadow">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <div class="h-56 sm:h-64 overflow-hidden relative">
+        <img id="detail-img" src="" alt="Stay detail" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-t from-sage-dark/80 via-transparent to-transparent"></div>
+        <div class="absolute bottom-4 left-6 right-6 text-white">
+          <h3 id="detail-title" class="text-2xl font-serif font-bold text-cream">Stay Title</h3>
+          <p id="detail-price" class="text-sm font-semibold text-tan">$240 / night</p>
+        </div>
+      </div>
+
+      <div class="p-6 sm:p-8 space-y-4">
+        <p id="detail-desc" class="text-xs sm:text-sm text-sage-dark/80 leading-relaxed">Detailed stay description goes here...</p>
+
+        <div class="grid grid-cols-2 gap-3 pt-2">
+          <div class="p-3 bg-tan/20 rounded-xl border border-tan/30">
+            <p class="text-[10px] font-bold uppercase text-sage-mid">Key Amenity</p>
+            <p class="text-xs font-bold text-sage-dark"><i class="fa-solid fa-fire text-terracotta mr-1"></i> Cedar Stove Heating</p>
+          </div>
+          <div class="p-3 bg-tan/20 rounded-xl border border-tan/30">
+            <p class="text-[10px] font-bold uppercase text-sage-mid">Cancellation</p>
+            <p class="text-xs font-bold text-sage-dark"><i class="fa-solid fa-shield-check text-sage-mid mr-1"></i> Free up to 48h</p>
+          </div>
+        </div>
+
+        <div class="pt-4 flex items-center justify-end space-x-3">
+          <button 
+            onclick="closeDetailModal()" 
+            class="px-5 py-2.5 rounded-xl text-xs font-bold text-sage-dark border border-sage-dark/30 hover:bg-tan/30">
+            Close
+          </button>
+          <button 
+            onclick="closeDetailModal(); openAuthModal('login'); showToast('Please log in to proceed with booking.');" 
+            class="px-6 py-2.5 rounded-xl text-xs font-bold text-cream bg-terracotta hover:bg-sage-dark shadow transition-colors">
+            Reserve This Sanctuary
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification System Container -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+    <div class="bg-sage-dark text-cream border border-tan px-5 py-3 rounded-2xl shadow-cozy-lg flex items-center space-x-3">
+      <div class="w-7 h-7 rounded-full bg-terracotta flex items-center justify-center text-xs">
+        <i class="fa-solid fa-check text-white"></i>
+      </div>
+      <p id="toast-message" class="text-xs font-semibold">Notification message</p>
+    </div>
+  </div>
+</body>
 </html>
